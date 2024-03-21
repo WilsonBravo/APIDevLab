@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-eu*ek9qb0iy5^btw^snn6gs5ems+7yeb-i=%q_7d#@$q9yv)pq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app', 'localhost']
 
 
 # Application definition
@@ -60,7 +60,9 @@ ROOT_URLCONF = 'APIDevLab.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / "templates"
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,6 +140,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "staticfiles",
 ]
+
+MEDIA_URL='media/'
+
+MEDIA_ROOT=BASE_DIR / "public"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
