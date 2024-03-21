@@ -75,9 +75,6 @@ def shuffle(request, dataDeck=dataDeck):
     dataDeck.to_json()
     data={
         "size":len(dataDeck.jsonDataDeck),
-        "order": [
-            'clubs','diamonds','hearts','spades',"joker"
-            ],
         "deck":dataDeck.jsonDataDeck
     }
 
