@@ -1,20 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class User(models.Model):
+class customFields(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     gender_choices=(
-        (0, 'male'),
-        (1, 'female'),
-        (2, 'prefers not to say'),
+        (0, 'Male'),
+        (1, 'Female'),
+        (2, 'Prefers not to say'),
     )
 
-    firstName = models.CharField(max_length=100)
-    lastName = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    email=models.EmailField(max_length=254, unique=True)
-    # phoneNumber=models.IntegerField() 
     birthdate=models.DateField()
     gender=models.IntegerField(choices=gender_choices)
+    # phoneNumber=models.IntegerField() 
 
     def __str__(self):
-        return f'{self.firstName} {self.lastName}'
+        return f'{self.user.username}'
