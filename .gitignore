@@ -1,4 +1,6 @@
 __pycache__
+env
 .env
 .vercel
 db.sqlite3
+test.json

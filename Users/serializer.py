@@ -26,7 +26,7 @@ class profileSerializer(serializers.ModelSerializer):
     custom_fields = customFieldsSerializer(source='customfields')
     class Meta:
         model=User
-        fields=['id', 'is_staff', 'username','first_name','last_name', 'groups', 'date_joined', 'last_login', 'custom_fields']
+        fields=['id', 'username','first_name','last_name', 'groups', 'date_joined', 'last_login', 'custom_fields']
 
     def to_representation(self, instance):
         if not instance.is_staff:

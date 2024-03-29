@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
 from rest_framework.authtoken.models import Token
@@ -15,6 +15,40 @@ from .models import *
 class UserAPIView(viewsets.ModelViewSet):
     serializer_class = profileSerializer
     queryset = User.objects.all()
+
+@api_view(['PATCH'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update(request):
+    if 'username' not in request.data:
+        return Response({"error": "You need to provide an username to perform this action."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        user = get_object_or_404(User, username=request.data["username"])
+        if user.is_staff:
+            return Response({"error":"You do not have permissions to perform this action."}, status=status.HTTP_403_FORBIDDEN)
+        del(request.data["username"])
+
+    serializer = UserSerializer(data=request.data, partial=True)
+    if serializer.is_valid():
+        for value in request.data:
+            setattr(user, value, request.data[value])
+            user.save()
+        return Response({"OK":1}, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def delete(request):
+    if 'username' not in request.data:
+        return Response({"error": "You need to provide an username to perform this action."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        user = get_object_or_404(User, username=request.data["username"])
+        if user.is_staff:
+            return Response({"error":"You do not have permissions to perform this action."}, status=status.HTTP_403_FORBIDDEN)
+        
+        user.delete()
+        return Response({"OK":1}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def login(request):
@@ -92,3 +126,12 @@ def profile(request):
     serializer = profileSerializer(instance=user)
 
     return Response({"user": serializer.data}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def get_users(request):
+    users=User.objects.all()
+    serializer = profileSerializer(users, many=True)
+
+    return Response({"users": serializer.data}, status=status.HTTP_200_OK)
