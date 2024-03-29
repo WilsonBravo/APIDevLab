@@ -26,6 +26,7 @@ from django.urls import path, include, re_path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cardsDeck/', include('cardsDeck.urls')),
+    path('sample_time_series_data/', include('SampleTimeSeries.urls')),
     path('', include('Users.urls')),
     path('', views.home, name='home'),
 ]

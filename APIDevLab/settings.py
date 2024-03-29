@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     'cardsDeck',
     'Users',
+    'SampleTimeSeries',
 ]
 
 MIDDLEWARE = [
